@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trivia Escolar 🎓</title>
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6dd5ed, #2193b0);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 700px;
+      width: 90%;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .question {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #ffffff20;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .options button:hover {
+      background-color: #ffffff40;
+    }
+
+    #result {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 1.4rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container animate__animated animate__fadeIn">
+    <h1>Trivia Escolar 🎉</h1>
+    <div id="quiz">
+      <div id="question-container">
+        <p id="question" class="question">Cargando pregunta...</p>
+        <div id="options" class="options"></div>
+      </div>
+    </div>
+    <div id="result" class="hidden"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "¿Cuál es la capital de México?",
+        options: ["Guadalajara", "Monterrey", "Ciudad de México", "Puebla"],
+        answer: "Ciudad de México"
+      },
+      {
+        question: "¿Qué planeta es conocido como el planeta rojo?",
+        options: ["Júpiter", "Venus", "Marte", "Saturno"],
+        answer: "Marte"
+      },
+      {
+        question: "¿Cuántos continentes hay en el mundo?",
+        options: ["5", "6", "7", "8"],
+        answer: "7"
+      },
+      {
+        question: "¿Quién pintó la Mona Lisa?",
+        options: ["Van Gogh", "Picasso", "Leonardo da Vinci", "Rembrandt"],
+        answer: "Leonardo da Vinci"
+      },
+      {
+        question: "¿Cuál es el metal más ligero?",
+        options: ["Oro", "Aluminio", "Litio", "Hierro"],
+        answer: "Litio"
+      },
+      {
+        question: "¿En qué país se encuentran las pirámides de Giza?",
+        options: ["México", "Irak", "Egipto", "Grecia"],
+        answer: "Egipto"
+      },
+      {
+        question: "¿Cuál es la montaña más alta del mundo?",
+        options: ["Aconcagua", "Himalaya", "Everest", "Makalu"],
+        answer: "Everest"
+      },
+      {
+        question: "¿Qué gas respiramos para vivir?",
+        options: ["Dióxido de carbono", "Nitrógeno", "Oxígeno", "Hidrógeno"],
+        answer: "Oxígeno"
+      },
+      {
+        question: "¿Cuál es el animal terrestre más grande?",
+        options: ["Ballena azul", "Rinoceronte", "Elefante africano", "Hipopótamo"],
+        answer: "Elefante africano"
+      },
+      {
+        question: "¿Cuál es la moneda oficial de Estados Unidos?",
+        options: ["Euro", "Peso", "Dólar", "Libra"],
+        answer: "Dólar"
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const resultEl = document.getElementById("result");
+
+    function loadQuestion() {
+      const q = questions[current];
+      questionEl.textContent = `Pregunta ${current + 1}: ${q.question}`;
+      optionsEl.innerHTML = "";
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(option);
+        btn.classList.add("animate__animated", "animate__fadeInUp");
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      if (selected === questions[current].answer) {
+        score++;
+      }
+      current++;
+      if (current < questions.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById("question-container").classList.add("hidden");
+      resultEl.classList.remove("hidden");
+
+      let feedback = "";
+      if (score === 10) {
+        feedback = "🎉 ¡Perfecto! Eres una estrella del conocimiento.";
+      } else if (score >= 7) {
+        feedback = "👍 ¡Muy bien! Tienes un gran conocimiento.";
+      } else if (score >= 4) {
+        feedback = "🧐 Bien hecho. ¡Sigue practicando!";
+      } else {
+        feedback = "😅 Ánimo. ¡Cada error es una oportunidad para aprender!";
+      }
+
+      resultEl.innerHTML = `
+        <p class="animate__animated animate__fadeIn">Obtuviste <strong>${score}/10</strong></p>
+        <p class="animate__animated animate__fadeInUp">${feedback}</p>
+      `;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
